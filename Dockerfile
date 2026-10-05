@@ -19,4 +19,5 @@ COPY --from=build /app/target/*.jar app.jar
 # Render asigna dinámicamente el puerto
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar app.jar"]
+# Limita el heap al 75% de la memoria del contenedor (el plan gratuito de Render tiene 512 MB)
+ENTRYPOINT ["sh", "-c", "exec java -XX:MaxRAMPercentage=75 -Dserver.port=${PORT:-8080} -jar app.jar"]
